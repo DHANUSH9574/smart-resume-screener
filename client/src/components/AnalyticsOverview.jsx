@@ -8,15 +8,13 @@ import {
 } from 'lucide-react';
 
 export function AnalyticsOverview({ candidates = [], activeJob, shortlistThreshold = 80, onThresholdChange }) {
-  if (candidates.length === 0) return null;
-
   const total = candidates.length;
-  const shortlisted = candidates.filter(c => (c.overall_score || 0) >= shortlistThreshold).length;
-  const shortlistRate = Math.round((shortlisted / total) * 100);
+  const shortlisted = total > 0 ? candidates.filter(c => (c.overall_score || 0) >= shortlistThreshold).length : 0;
+  const shortlistRate = total > 0 ? Math.round((shortlisted / total) * 100) : 0;
 
-  const avgScore = Math.round(
-    candidates.reduce((sum, c) => sum + (c.overall_score || 0), 0) / total
-  );
+  const avgScore = total > 0
+    ? Math.round(candidates.reduce((sum, c) => sum + (c.overall_score || 0), 0) / total)
+    : 0;
 
   // Calculate most frequent matched skills
   const matchedSkillCounts = {};
