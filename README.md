@@ -1,6 +1,8 @@
 # 🚀 SmartResume AI - Intelligent Resume Screener & Candidate Matcher
 
-Demo video link : https://drive.google.com/file/d/1-AwtlR8QMj7df4eMH8IbwsaWnVxOAtAE/view?usp=drive_link
+> ### 🎥 Project Demonstration & Video Walkthrough
+> **▶️ [Click here to Watch the Demo Video on Google Drive](https://drive.google.com/file/d/1-AwtlR8QMj7df4eMH8IbwsaWnVxOAtAE/view?usp=drive_link)**  
+> *A full walkthrough showcasing multi-format resume parsing (PDF/DOCX/TXT), Gemini AI semantic matching, 1-10 fit scoring with justification, and the interactive AI Copilot.*
 
 [![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
 [![Vite](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-646CFF.svg)](https://vitejs.dev/)
@@ -13,6 +15,7 @@ An intelligent recruitment screening platform that automatically parses multi-fo
 ---
 
 ## 📑 Table of Contents
+- [🎥 Demo Video Walkthrough](#-project-demonstration--video-walkthrough)
 - [Key Features](#-key-features)
 - [System Architecture](#-system-architecture)
 - [LLM Prompt Engineering & Guidance](#-llm-prompt-engineering--guidance)
