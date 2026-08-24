@@ -1,5 +1,7 @@
 # 🚀 SmartResume AI - Intelligent Resume Screener & Candidate Matcher
 
+Demo video link : https://drive.google.com/file/d/1-AwtlR8QMj7df4eMH8IbwsaWnVxOAtAE/view?usp=drive_link
+
 [![Node.js Version](https://img.shields.io/badge/Node.js-v18+-green.svg)](https://nodejs.org/)
 [![Vite](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-646CFF.svg)](https://vitejs.dev/)
 [![TailwindCSS](https://img.shields.io/badge/Styling-TailwindCSS%203.4-38B2AC.svg)](https://tailwindcss.com/)
