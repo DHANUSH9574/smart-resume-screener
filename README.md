@@ -56,35 +56,36 @@ An intelligent recruitment screening platform that automatically parses multi-fo
 ```mermaid
 flowchart TD
     subgraph Client ["Frontend (React 18 + Vite + TailwindCSS)"]
-        UI_Nav[Navbar & Role Selector]
-        UI_Upload[Batch Resume Dropzone (PDF/DOCX/TXT)]
-        UI_Board[Ranked Candidate Leaderboard]
-        UI_Dossier[AI Candidate Dossier Modal]
-        UI_Matrix[Side-by-Side Comparison Matrix]
-        UI_Export[CSV / PDF Exporter]
+        UI_Nav["Navbar & Role Selector"]
+        UI_Upload["Batch Resume Dropzone (PDF, DOCX, TXT)"]
+        UI_Board["Ranked Candidate Leaderboard"]
+        UI_Dossier["AI Candidate Dossier Modal"]
+        UI_Matrix["Side-by-Side Comparison Matrix"]
+        UI_Copilot["Interactive AI Copilot Bar"]
     end
 
     subgraph Backend ["Backend Server (Node.js + Express)"]
-        Router[REST API Router /api/*]
-        Parser[File Parser: pdf-parse & mammoth]
-        LLM_Extract[LLM Resume Extractor]
-        LLM_Match[LLM Semantic Matcher]
-        DB[(Persistent SQLite / JSON Database)]
+        Router["REST API Router (/api/*)"]
+        Parser["File Parser (pdf-parse and mammoth)"]
+        LLM_Extract["LLM Resume Extractor"]
+        LLM_Match["LLM Semantic Matcher"]
+        DB[("Persistent SQLite / JSON Database")]
     end
 
     subgraph AI_Engine ["AI & LLM Services"]
-        Gemini[Google Gemini 2.5/3.7 Flash]
-        Heuristic[NLP Heuristic Fallback Engine]
+        Gemini["Google Gemini 2.5 / 3.7 Flash"]
+        Heuristic["NLP Heuristic Fallback Engine"]
     end
 
-    UI_Upload -->|Upload Files + Select JD| Router
+    UI_Upload --> Router
+    UI_Copilot --> Router
     Router --> Parser
     Parser --> LLM_Extract
-    LLM_Extract -->|Extract Profile| Gemini
-    LLM_Extract -->|Fallback| Heuristic
+    LLM_Extract --> Gemini
+    LLM_Extract --> Heuristic
     LLM_Extract --> LLM_Match
-    LLM_Match -->|Compute Semantic Fit| Gemini
-    LLM_Match -->|Fallback| Heuristic
+    LLM_Match --> Gemini
+    LLM_Match --> Heuristic
     LLM_Match --> DB
     DB --> Router
     Router --> UI_Board
