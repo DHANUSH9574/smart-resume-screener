@@ -78,7 +78,7 @@ export function CandidateDetailModal({
           <div className="flex items-start gap-4">
             <div className={`w-14 h-14 rounded-2xl border flex flex-col items-center justify-center shrink-0 ${getScoreColor(score)} shadow-lg`}>
               <span className="text-2xl font-display font-extrabold leading-none">{score}%</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider mt-0.5">Match</span>
+              <span className="text-[10px] font-bold text-slate-300 mt-0.5">{(score / 10).toFixed(1)} / 10 Fit</span>
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">

@@ -324,12 +324,12 @@ export function CandidateLeaderboard({
                   </div>
 
                   {/* Main Overall Match Score Gauge */}
-                  <div className={`px-3 py-2 rounded-xl border flex flex-col items-center justify-center min-w-[75px] ${getScoreColor(score)}`}>
-                    <span className="text-xl font-display font-extrabold tracking-tight leading-none">
+                  <div className={`px-3 py-1.5 rounded-xl border flex flex-col items-center justify-center min-w-[78px] ${getScoreColor(score)}`}>
+                    <span className="text-lg font-display font-extrabold tracking-tight leading-none">
                       {score}%
                     </span>
-                    <span className="text-[9px] font-bold uppercase tracking-wider mt-0.5">
-                      Match
+                    <span className="text-[10px] font-bold text-slate-300 mt-0.5">
+                      {(score / 10).toFixed(1)}/10 Fit
                     </span>
                   </div>
 
