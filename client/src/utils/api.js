@@ -102,12 +102,20 @@ export const api = {
 
   // Custom AI Natural Language Prompt Query / Copilot
   async promptQuery({ prompt, jobId, candidateIds }) {
-    const res = await fetch(`${API_BASE}/prompt-query`, {
-      method: 'POST',
-      headers: getHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ prompt, jobId, candidateIds })
-    });
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/prompt-query`, {
+        method: 'POST',
+        headers: getHeaders({ 'Content-Type': 'application/json' }),
+        body: JSON.stringify({ prompt, jobId, candidateIds })
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        return { success: false, error: `Server error (${res.status}): ${errText || res.statusText}` };
+      }
+      return await res.json();
+    } catch (err) {
+      return { success: false, error: `Connection failed: ${err.message}. Ensure backend server is running on port 5000.` };
+    }
   },
 
   // Export
