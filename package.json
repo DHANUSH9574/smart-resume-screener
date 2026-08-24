@@ -1,0 +1,20 @@
+{
+  "name": "smart-resume-screener",
+  "version": "1.0.0",
+  "description": "Intelligent Resume Screener - Multi-format Resume Parsing, LLM Semantic Matching, and Recruiter Dashboard",
+  "scripts": {
+    "dev:server": "cd server && npm run start",
+    "dev:client": "cd client && npm run dev",
+    "start": "node server/src/server.js",
+    "build:client": "cd client && npm run build"
+  },
+  "keywords": [
+    "resume-screener",
+    "gemini-ai",
+    "recruitment",
+    "llm-matching",
+    "pdf-parse"
+  ],
+  "author": "SmartResume AI Team",
+  "license": "MIT"
+}
