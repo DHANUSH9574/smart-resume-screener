@@ -8,6 +8,7 @@ import { CandidateDetailModal } from './components/CandidateDetailModal';
 import { CandidateCompareModal } from './components/CandidateCompareModal';
 import { JobManagerModal } from './components/JobManagerModal';
 import { ApiKeyModal } from './components/ApiKeyModal';
+import { AiPromptCopilot } from './components/AiPromptCopilot';
 import { 
   Sparkles, 
   Briefcase, 
@@ -249,6 +250,12 @@ export default function App() {
           activeJob={activeJob}
           shortlistThreshold={shortlistThreshold}
           onThresholdChange={handleThresholdChange}
+        />
+
+        {/* Interactive AI Copilot & Custom Prompt Bar */}
+        <AiPromptCopilot
+          activeJob={activeJob}
+          candidates={candidates}
         />
 
         {/* Multi-Resume Parser & Screener Upload Hub */}

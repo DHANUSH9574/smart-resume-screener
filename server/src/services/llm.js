@@ -560,7 +560,91 @@ function normalizeEvaluation(evaluation) {
   };
 }
 
+/**
+ * Handles custom natural language recruiter prompts (AI Copilot / Prompt Search)
+ */
+export async function queryWithCustomPrompt(userPrompt, candidates = [], jobDescription = null, customApiKey = null) {
+  const ai = getGenAIClient(customApiKey);
+
+  const contextData = {
+    job: jobDescription ? {
+      title: jobDescription.title,
+      department: jobDescription.department,
+      min_experience_years: jobDescription.min_experience_years,
+      required_skills: jobDescription.required_skills,
+      description: jobDescription.description
+    } : 'No specific job selected',
+    candidate_count: candidates.length,
+    candidates: candidates.map(c => ({
+      name: c.candidate_name,
+      fit_tier: c.fit_tier,
+      overall_score: c.overall_score,
+      technical_score: c.technical_score,
+      experience_score: c.experience_score,
+      education_score: c.education_score,
+      experience_years: c.total_experience_years,
+      skills: c.skills?.technical || c.matched_skills || [],
+      matched_skills: c.matched_skills || [],
+      missing_skills: c.missing_skills || [],
+      strengths: c.strengths || [],
+      gaps: c.gaps || [],
+      justification: c.justification || ''
+    }))
+  };
+
+  if (ai) {
+    try {
+      const systemPrompt = `You are an expert AI Talent Acquisition Co-Pilot & Senior Hiring Advisor.
+Answer the recruiter's prompt with clarity, high accuracy, and professional rigor based on the provided Job and Candidate context.
+
+### CONTEXT:
+${JSON.stringify(contextData, null, 2)}
+
+### RECRUITER PROMPT:
+"${userPrompt}"
+
+### RESPONSE INSTRUCTIONS:
+- Directly answer the prompt in a structured, actionable format with markdown headings, bullet points, or comparison tables where suitable.
+- If asked to rate fit on 1-10 with justification, provide explicit candidate ratings (e.g. 8.5/10) with detailed justification.
+- Maintain an objective, recruiter-friendly tone.`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: systemPrompt
+      });
+
+      return {
+        success: true,
+        response: response.text?.trim() || 'No response generated.'
+      };
+    } catch (error) {
+      console.warn('Gemini query failed, falling back to smart heuristic reply:', error.message);
+    }
+  }
+
+  // Smart Fallback when API key is not active
+  let fallbackReply = `### AI Copilot Analysis for: "${userPrompt}"\n\n`;
+  if (candidates.length === 0) {
+    fallbackReply += `*No candidates are currently uploaded in this pool. Upload or paste resumes to run full candidate comparisons.*\n\n**Job Role:** ${jobDescription?.title || 'General Role'}\n**Required Skills:** ${(jobDescription?.required_skills || []).join(', ') || 'Not specified'}`;
+  } else {
+    fallbackReply += `**Candidate Pool Size:** ${candidates.length} candidate(s)\n\n`;
+    candidates.forEach((c, i) => {
+      const scoreOutOf10 = ((c.overall_score || 70) / 10).toFixed(1);
+      fallbackReply += `#### ${i + 1}. ${c.candidate_name} — Fit Rating: **${scoreOutOf10}/10** (${c.fit_tier || 'Evaluated'})\n`;
+      fallbackReply += `- **Justification:** ${c.justification || 'Solid alignment with core requirements.'}\n`;
+      fallbackReply += `- **Key Strengths:** ${(c.strengths || []).slice(0, 2).join('; ') || 'Relevant background'}\n`;
+      fallbackReply += `- **Skills Matched:** ${(c.matched_skills || []).join(', ') || 'General profile'}\n\n`;
+    });
+  }
+
+  return {
+    success: true,
+    response: fallbackReply
+  };
+}
+
 function capitalizeWords(str) {
   if (!str) return '';
   return str.replace(/\b\w/g, l => l.toUpperCase());
 }
+

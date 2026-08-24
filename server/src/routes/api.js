@@ -3,7 +3,7 @@ import multer from 'multer';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../db/database.js';
 import { extractTextFromFile } from '../services/parser.js';
-import { extractResumeData, matchResumeWithJob, extractSkillsFromText } from '../services/llm.js';
+import { extractResumeData, matchResumeWithJob, extractSkillsFromText, queryWithCustomPrompt } from '../services/llm.js';
 
 const router = express.Router();
 const upload = multer({
@@ -398,4 +398,30 @@ router.get('/export/:jobId', (req, res) => {
   }
 });
 
+// Custom Natural Language AI Prompt Query / Copilot
+router.post('/prompt-query', async (req, res) => {
+  try {
+    const { prompt, jobId, candidateIds } = req.body;
+    if (!prompt || !prompt.trim()) {
+      return res.status(400).json({ success: false, error: 'Prompt is required' });
+    }
+
+    const customApiKey = req.headers['x-gemini-api-key'] || req.body.apiKey || null;
+    let job = jobId ? db.getJobById(jobId) : null;
+    let candidates = [];
+
+    if (Array.isArray(candidateIds) && candidateIds.length > 0) {
+      candidates = candidateIds.map(id => db.getScreeningById(id)).filter(Boolean);
+    } else if (jobId) {
+      candidates = db.getScreeningsByJob(jobId);
+    }
+
+    const result = await queryWithCustomPrompt(prompt.trim(), candidates, job, customApiKey);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 export default router;
+

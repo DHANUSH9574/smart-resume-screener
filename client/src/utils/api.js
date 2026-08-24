@@ -100,7 +100,17 @@ export const api = {
     return data.data || [];
   },
 
-  // Export CSV
+  // Custom AI Natural Language Prompt Query / Copilot
+  async promptQuery({ prompt, jobId, candidateIds }) {
+    const res = await fetch(`${API_BASE}/prompt-query`, {
+      method: 'POST',
+      headers: getHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ prompt, jobId, candidateIds })
+    });
+    return res.json();
+  },
+
+  // Export
   getExportUrl(jobId) {
     return `${API_BASE}/export/${jobId}`;
   }
